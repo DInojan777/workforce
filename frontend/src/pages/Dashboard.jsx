@@ -10,19 +10,9 @@ export default function Dashboard() {
     const { user, permissions, isAuthenticated, logout, loading } = useAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!loading && !isAuthenticated) navigate('/login');
-    }, [loading, isAuthenticated]);
+    useEffect(() => { if (!loading && !isAuthenticated) navigate('/login'); }, [loading, isAuthenticated]);
 
-    if (loading) {
-        return (
-            <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-text-secondary">
-                <div className="spinner-lg" />
-                <p>Loading your dashboard...</p>
-            </div>
-        );
-    }
-
+    if (loading) return <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-text-secondary"><div className="spinner-lg" /><p>Loading your dashboard...</p></div>;
     if (!user) return null;
 
     const quickActions = [
@@ -32,13 +22,13 @@ export default function Dashboard() {
     ];
 
     const getRoleBadges = () => {
-        const badges = [];
-        if (permissions?.is_admin) badges.push({ label: 'Admin', variant: 'danger' });
-        if (permissions?.is_job_seeker) badges.push({ label: 'Job Seeker', variant: 'info' });
-        if (permissions?.is_client) badges.push({ label: 'Client', variant: 'accent' });
-        if (permissions?.is_contractor) badges.push({ label: 'Contractor', variant: 'warning' });
-        if (permissions?.is_guest) badges.push({ label: 'Guest', variant: 'default' });
-        return badges;
+        const b = [];
+        if (permissions?.is_admin) b.push({ label: 'Admin', variant: 'danger' });
+        if (permissions?.is_job_seeker) b.push({ label: 'Job Seeker', variant: 'info' });
+        if (permissions?.is_client) b.push({ label: 'Client', variant: 'accent' });
+        if (permissions?.is_contractor) b.push({ label: 'Contractor', variant: 'warning' });
+        if (permissions?.is_guest) b.push({ label: 'Guest', variant: 'default' });
+        return b;
     };
 
     return (
@@ -52,58 +42,36 @@ export default function Dashboard() {
                     <Button variant="ghost" icon={LogOut} onClick={() => { logout(); navigate('/'); }}>Logout</Button>
                 </div>
 
-                {/* Stats Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
                     <Card className="flex items-center gap-4">
-                        <div className="w-11 h-11 rounded-xl bg-accent-soft flex items-center justify-center">
-                            <Activity size={22} className="text-accent-primary" />
-                        </div>
-                        <div>
-                            <p className="text-xs text-text-muted">Status</p>
-                            <p className="text-lg font-semibold">{user.is_active ? 'Active' : 'Inactive'}</p>
-                        </div>
+                        <div className="w-11 h-11 rounded-xl bg-accent-soft flex items-center justify-center"><Activity size={22} className="text-accent-primary" /></div>
+                        <div><p className="text-xs text-text-muted">Status</p><p className="text-lg font-semibold">{user.is_active ? 'Active' : 'Inactive'}</p></div>
                     </Card>
                     <Card className="flex items-center gap-4">
-                        <div className="w-11 h-11 rounded-xl bg-info-soft flex items-center justify-center">
-                            <Clock size={22} className="text-info" />
-                        </div>
-                        <div>
-                            <p className="text-xs text-text-muted">Email</p>
-                            <p className="text-sm font-semibold truncate max-w-[180px]">{user.email}</p>
-                        </div>
+                        <div className="w-11 h-11 rounded-xl bg-info-soft flex items-center justify-center"><Clock size={22} className="text-info" /></div>
+                        <div><p className="text-xs text-text-muted">Email</p><p className="text-sm font-semibold truncate max-w-[180px]">{user.email}</p></div>
                     </Card>
                     <Card className="flex items-center gap-4">
-                        <div className="w-11 h-11 rounded-xl bg-success-soft flex items-center justify-center">
-                            <TrendingUp size={22} className="text-success" />
-                        </div>
-                        <div>
-                            <p className="text-xs text-text-muted">Mobile</p>
-                            <p className="text-lg font-semibold">{user.mobile_number || 'N/A'}</p>
-                        </div>
+                        <div className="w-11 h-11 rounded-xl bg-success-soft flex items-center justify-center"><TrendingUp size={22} className="text-success" /></div>
+                        <div><p className="text-xs text-text-muted">Mobile</p><p className="text-lg font-semibold">{user.mobile_number || 'N/A'}</p></div>
                     </Card>
                 </div>
 
-                {/* Role Badges */}
                 <Card className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }} hover={false}>
                     <h3 className="flex items-center gap-2 mb-4 text-base"><Shield size={18} /> Your Roles</h3>
                     <div className="flex flex-wrap gap-2">
-                        {getRoleBadges().map((b, i) => (
-                            <Badge key={i} variant={b.variant}>{b.label}</Badge>
-                        ))}
+                        {getRoleBadges().map((b, i) => <Badge key={i} variant={b.variant}>{b.label}</Badge>)}
                         {getRoleBadges().length === 0 && <span className="text-sm text-text-muted">No roles assigned</span>}
                     </div>
                 </Card>
 
-                {/* Quick Actions */}
                 <div className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
                     <h3 className="mb-4 text-base">Quick Actions</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         {quickActions.map((a, i) => (
                             <Link to={a.path} key={i}>
                                 <Card className="flex flex-col items-center gap-3 text-center py-8">
-                                    <div className={a.color}>
-                                        <a.icon size={28} />
-                                    </div>
+                                    <div className={a.color}><a.icon size={28} /></div>
                                     <span className="text-sm font-medium">{a.label}</span>
                                 </Card>
                             </Link>

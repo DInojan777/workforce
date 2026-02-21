@@ -1,6 +1,6 @@
 const variants = {
-    default: 'bg-white/[0.08] text-text-secondary',
-    accent: 'bg-accent-soft text-text-accent',
+    default: 'bg-bg-input text-text-secondary',
+    accent: 'bg-accent-soft text-accent-primary',
     info: 'bg-info-soft text-info',
     warning: 'bg-warning-soft text-warning',
     danger: 'bg-danger-soft text-danger',

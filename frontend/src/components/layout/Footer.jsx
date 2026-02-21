@@ -1,50 +1,49 @@
 import { Link } from 'react-router-dom';
-import { Briefcase, Github, Mail, Heart } from 'lucide-react';
+import { Briefcase } from 'lucide-react';
 
 export default function Footer() {
     return (
-        <footer className="border-t border-border-subtle bg-bg-secondary/50 pt-12 pb-6">
-            <div className="max-w-[1280px] mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-                    <div className="md:col-span-1">
-                        <Link to="/" className="flex items-center gap-2 text-text-primary font-bold text-lg mb-3">
-                            <Briefcase size={22} className="text-accent-primary" />
+        <footer className="bg-white border-t border-border-subtle">
+            <div className="max-w-[1280px] mx-auto px-6 py-12">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <Link to="/" className="flex items-center gap-2 font-bold text-lg mb-3">
+                            <Briefcase size={20} className="text-accent-primary" />
                             <span className="gradient-text">Workforce</span>
                         </Link>
-                        <p className="text-sm text-text-muted leading-relaxed">
-                            Connecting talented professionals with great opportunities. Find your next career move with us.
-                        </p>
+                        <p className="text-sm text-text-secondary leading-relaxed">Connecting talent with opportunity. Find your dream career or hire the best talent.</p>
                     </div>
-
-                    <div className="flex flex-col gap-2.5">
-                        <h4 className="text-sm font-semibold text-text-primary mb-1">Platform</h4>
-                        <Link to="/jobs" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Browse Jobs</Link>
-                        <Link to="/create-job" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Post a Job</Link>
-                        <Link to="/register" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Sign Up</Link>
+                    <div>
+                        <h4 className="text-sm font-semibold uppercase tracking-wider mb-3">For Seekers</h4>
+                        <div className="flex flex-col gap-2">
+                            <Link to="/jobs" className="text-sm text-text-secondary hover:text-accent-primary transition-colors">Browse Jobs</Link>
+                            <Link to="/register" className="text-sm text-text-secondary hover:text-accent-primary transition-colors">Create Account</Link>
+                            <Link to="/profile" className="text-sm text-text-secondary hover:text-accent-primary transition-colors">My Profile</Link>
+                        </div>
                     </div>
-
-                    <div className="flex flex-col gap-2.5">
-                        <h4 className="text-sm font-semibold text-text-primary mb-1">Company</h4>
-                        <a href="#" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">About Us</a>
-                        <a href="#" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Privacy Policy</a>
-                        <a href="#" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Terms of Service</a>
+                    <div>
+                        <h4 className="text-sm font-semibold uppercase tracking-wider mb-3">For Employers</h4>
+                        <div className="flex flex-col gap-2">
+                            <Link to="/create-job" className="text-sm text-text-secondary hover:text-accent-primary transition-colors">Post a Job</Link>
+                            <Link to="/register" className="text-sm text-text-secondary hover:text-accent-primary transition-colors">Register</Link>
+                            <Link to="/dashboard" className="text-sm text-text-secondary hover:text-accent-primary transition-colors">Dashboard</Link>
+                        </div>
                     </div>
-
-                    <div className="flex flex-col gap-2.5">
-                        <h4 className="text-sm font-semibold text-text-primary mb-1">Connect</h4>
-                        <a href="#" className="flex items-center gap-2 text-sm text-text-muted hover:text-text-accent transition-colors duration-200">
-                            <Mail size={14} /> support@workforce.com
-                        </a>
-                        <a href="#" className="flex items-center gap-2 text-sm text-text-muted hover:text-text-accent transition-colors duration-200">
-                            <Github size={14} /> GitHub
-                        </a>
+                    <div>
+                        <h4 className="text-sm font-semibold uppercase tracking-wider mb-3">Company</h4>
+                        <div className="flex flex-col gap-2">
+                            <span className="text-sm text-text-secondary">About Us</span>
+                            <span className="text-sm text-text-secondary">Contact</span>
+                            <span className="text-sm text-text-secondary">Privacy Policy</span>
+                        </div>
                     </div>
                 </div>
-
-                <div className="border-t border-border-subtle pt-6 text-center">
-                    <p className="text-sm text-text-muted flex items-center justify-center gap-1">
-                        © 2026 Workforce. Made with <Heart size={14} className="text-danger fill-danger" /> All rights reserved.
-                    </p>
+                <div className="pt-6 border-t border-border-subtle flex flex-wrap justify-between items-center gap-4">
+                    <p className="text-xs text-text-muted">© 2024 Workforce. All rights reserved.</p>
+                    <div className="flex gap-6">
+                        <span className="text-xs text-text-muted hover:text-accent-primary cursor-pointer transition-colors">Terms</span>
+                        <span className="text-xs text-text-muted hover:text-accent-primary cursor-pointer transition-colors">Privacy</span>
+                    </div>
                 </div>
             </div>
         </footer>

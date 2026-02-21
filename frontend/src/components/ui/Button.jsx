@@ -1,12 +1,12 @@
 const variants = {
-    primary: 'bg-accent-primary hover:bg-accent-primary-hover text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]',
-    secondary: 'bg-white/[0.06] hover:bg-white/[0.1] text-text-primary border border-border-subtle',
-    ghost: 'bg-transparent hover:bg-white/[0.06] text-text-secondary hover:text-text-primary',
-    danger: 'bg-danger hover:bg-red-600 text-white',
+    primary: 'bg-accent-primary hover:bg-accent-primary-hover text-white shadow-[0_2px_8px_rgba(37,99,235,0.25)] hover:shadow-[0_4px_16px_rgba(37,99,235,0.35)]',
+    secondary: 'bg-white hover:bg-bg-input text-text-primary border border-border-subtle shadow-sm hover:border-accent-primary hover:text-accent-primary',
+    ghost: 'bg-transparent hover:bg-bg-input text-text-secondary hover:text-text-primary',
+    danger: 'bg-danger hover:bg-red-700 text-white',
 };
 
 const sizes = {
-    sm: 'px-4 py-2 text-sm gap-1.5',
+    sm: 'px-4 py-2 text-[13px] gap-1.5',
     md: 'px-6 py-2.5 text-sm gap-2',
     lg: 'px-8 py-3.5 text-base gap-2.5',
 };
@@ -23,7 +23,7 @@ export default function Button({ children, variant = 'primary', size = 'md', loa
             disabled={loading || props.disabled}
             {...props}
         >
-            {loading && <span className="spinner-lg !w-4 !h-4 !border-2" />}
+            {loading && <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
             {Icon && !loading && <Icon size={size === 'sm' ? 16 : 18} />}
             <span>{children}</span>
         </button>
