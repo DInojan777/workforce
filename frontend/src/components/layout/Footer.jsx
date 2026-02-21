@@ -1,45 +1,50 @@
 import { Link } from 'react-router-dom';
 import { Briefcase, Github, Mail, Heart } from 'lucide-react';
-import './Footer.css';
 
 export default function Footer() {
     return (
-        <footer className="footer">
-            <div className="container">
-                <div className="footer__grid">
-                    <div className="footer__brand">
-                        <Link to="/" className="footer__logo">
-                            <Briefcase size={22} />
-                            <span>Workforce</span>
+        <footer className="border-t border-border-subtle bg-bg-secondary/50 pt-12 pb-6">
+            <div className="max-w-[1280px] mx-auto px-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+                    <div className="md:col-span-1">
+                        <Link to="/" className="flex items-center gap-2 text-text-primary font-bold text-lg mb-3">
+                            <Briefcase size={22} className="text-accent-primary" />
+                            <span className="gradient-text">Workforce</span>
                         </Link>
-                        <p className="footer__desc">
+                        <p className="text-sm text-text-muted leading-relaxed">
                             Connecting talented professionals with great opportunities. Find your next career move with us.
                         </p>
                     </div>
 
-                    <div className="footer__col">
-                        <h4 className="footer__title">Platform</h4>
-                        <Link to="/jobs" className="footer__link">Browse Jobs</Link>
-                        <Link to="/create-job" className="footer__link">Post a Job</Link>
-                        <Link to="/register" className="footer__link">Sign Up</Link>
+                    <div className="flex flex-col gap-2.5">
+                        <h4 className="text-sm font-semibold text-text-primary mb-1">Platform</h4>
+                        <Link to="/jobs" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Browse Jobs</Link>
+                        <Link to="/create-job" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Post a Job</Link>
+                        <Link to="/register" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Sign Up</Link>
                     </div>
 
-                    <div className="footer__col">
-                        <h4 className="footer__title">Company</h4>
-                        <a href="#" className="footer__link">About Us</a>
-                        <a href="#" className="footer__link">Privacy Policy</a>
-                        <a href="#" className="footer__link">Terms of Service</a>
+                    <div className="flex flex-col gap-2.5">
+                        <h4 className="text-sm font-semibold text-text-primary mb-1">Company</h4>
+                        <a href="#" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">About Us</a>
+                        <a href="#" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Privacy Policy</a>
+                        <a href="#" className="text-sm text-text-muted hover:text-text-accent transition-colors duration-200">Terms of Service</a>
                     </div>
 
-                    <div className="footer__col">
-                        <h4 className="footer__title">Connect</h4>
-                        <a href="#" className="footer__link"><Mail size={14} /> support@workforce.com</a>
-                        <a href="#" className="footer__link"><Github size={14} /> GitHub</a>
+                    <div className="flex flex-col gap-2.5">
+                        <h4 className="text-sm font-semibold text-text-primary mb-1">Connect</h4>
+                        <a href="#" className="flex items-center gap-2 text-sm text-text-muted hover:text-text-accent transition-colors duration-200">
+                            <Mail size={14} /> support@workforce.com
+                        </a>
+                        <a href="#" className="flex items-center gap-2 text-sm text-text-muted hover:text-text-accent transition-colors duration-200">
+                            <Github size={14} /> GitHub
+                        </a>
                     </div>
                 </div>
 
-                <div className="footer__bottom">
-                    <p>© 2026 Workforce. Made with <Heart size={14} className="footer__heart" /> All rights reserved.</p>
+                <div className="border-t border-border-subtle pt-6 text-center">
+                    <p className="text-sm text-text-muted flex items-center justify-center gap-1">
+                        © 2026 Workforce. Made with <Heart size={14} className="text-danger fill-danger" /> All rights reserved.
+                    </p>
                 </div>
             </div>
         </footer>

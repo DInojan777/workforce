@@ -1,13 +1,29 @@
-import './Button.css';
+const variants = {
+    primary: 'bg-accent-primary hover:bg-accent-primary-hover text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)]',
+    secondary: 'bg-white/[0.06] hover:bg-white/[0.1] text-text-primary border border-border-subtle',
+    ghost: 'bg-transparent hover:bg-white/[0.06] text-text-secondary hover:text-text-primary',
+    danger: 'bg-danger hover:bg-red-600 text-white',
+};
 
-export default function Button({ children, variant = 'primary', size = 'md', loading, fullWidth, icon: Icon, ...props }) {
+const sizes = {
+    sm: 'px-4 py-2 text-sm gap-1.5',
+    md: 'px-6 py-2.5 text-sm gap-2',
+    lg: 'px-8 py-3.5 text-base gap-2.5',
+};
+
+export default function Button({ children, variant = 'primary', size = 'md', loading, fullWidth, icon: Icon, className = '', ...props }) {
     return (
         <button
-            className={`btn btn--${variant} btn--${size} ${fullWidth ? 'btn--full' : ''} ${loading ? 'btn--loading' : ''}`}
+            className={`inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-250 cursor-pointer
+                ${variants[variant] || variants.primary}
+                ${sizes[size] || sizes.md}
+                ${fullWidth ? 'w-full' : ''}
+                ${loading ? 'opacity-60 pointer-events-none' : ''}
+                ${className}`}
             disabled={loading || props.disabled}
             {...props}
         >
-            {loading && <span className="btn__spinner" />}
+            {loading && <span className="spinner-lg !w-4 !h-4 !border-2" />}
             {Icon && !loading && <Icon size={size === 'sm' ? 16 : 18} />}
             <span>{children}</span>
         </button>
