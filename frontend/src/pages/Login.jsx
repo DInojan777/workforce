@@ -6,7 +6,6 @@ import { loginUser } from '../services/api';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Card from '../components/ui/Card';
-import './Login.css';
 
 export default function Login() {
     const [mode, setMode] = useState('email');
@@ -46,74 +45,50 @@ export default function Login() {
     };
 
     return (
-        <div className="login-page">
-            <div className="login-page__bg-orb" />
-            <div className="container login-page__container">
-                <Card className="login-card animate-fade-in-up" hover={false}>
-                    <div className="login-card__header">
-                        <h2>Welcome Back</h2>
-                        <p>Sign in to your account to continue</p>
+        <div className="relative min-h-screen flex items-center justify-center py-20">
+            <div className="absolute top-[10%] right-[10%] w-[400px] h-[400px] bg-accent-primary/15 rounded-full blur-[120px] pointer-events-none" />
+            <div className="max-w-[1280px] mx-auto px-6 w-full flex justify-center">
+                <Card className="animate-fade-in-up w-full max-w-md p-8" hover={false}>
+                    <div className="text-center mb-8">
+                        <h2 className="mb-2">Welcome Back</h2>
+                        <p className="text-text-secondary">Sign in to your account to continue</p>
                     </div>
 
-                    <div className="login-card__toggle">
+                    <div className="flex rounded-xl bg-white/[0.04] p-1 mb-6">
                         <button
-                            className={`toggle-btn ${mode === 'email' ? 'toggle-btn--active' : ''}`}
+                            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+                                ${mode === 'email' ? 'bg-accent-primary text-white' : 'text-text-secondary hover:text-text-primary'}`}
                             onClick={() => setMode('email')}
                         >
                             <Mail size={16} /> Email
                         </button>
                         <button
-                            className={`toggle-btn ${mode === 'mobile' ? 'toggle-btn--active' : ''}`}
+                            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+                                ${mode === 'mobile' ? 'bg-accent-primary text-white' : 'text-text-secondary hover:text-text-primary'}`}
                             onClick={() => setMode('mobile')}
                         >
                             <Phone size={16} /> Mobile
                         </button>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="login-card__form">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                         {mode === 'email' ? (
-                            <Input
-                                label="Email Address"
-                                name="email"
-                                type="email"
-                                icon={Mail}
-                                placeholder="you@example.com"
-                                value={form.email}
-                                onChange={handleChange}
-                                required
-                            />
+                            <Input label="Email Address" name="email" type="email" icon={Mail} placeholder="you@example.com" value={form.email} onChange={handleChange} required />
                         ) : (
-                            <Input
-                                label="Mobile Number"
-                                name="mobile_number"
-                                icon={Phone}
-                                placeholder="10-digit mobile number"
-                                value={form.mobile_number}
-                                onChange={handleChange}
-                                required
-                            />
+                            <Input label="Mobile Number" name="mobile_number" icon={Phone} placeholder="10-digit mobile number" value={form.mobile_number} onChange={handleChange} required />
                         )}
 
-                        <Input
-                            label="Password"
-                            name="password"
-                            type="password"
-                            icon={Lock}
-                            placeholder="Enter your password"
-                            value={form.password}
-                            onChange={handleChange}
-                            required
-                        />
+                        <Input label="Password" name="password" type="password" icon={Lock} placeholder="Enter your password" value={form.password} onChange={handleChange} required />
 
-                        {error && <div className="login-card__error">{error}</div>}
+                        {error && <div className="text-sm text-danger bg-danger-soft rounded-lg px-4 py-2.5">{error}</div>}
 
                         <Button type="submit" fullWidth loading={loading} icon={ArrowRight}>
                             Sign In
                         </Button>
                     </form>
 
-                    <div className="login-card__footer">
-                        <p>Don't have an account? <Link to="/register" className="login-card__link">Sign up</Link></p>
+                    <div className="text-center mt-6 pt-6 border-t border-border-subtle">
+                        <p className="text-sm text-text-secondary">Don't have an account? <Link to="/register" className="text-text-accent hover:underline font-medium">Sign up</Link></p>
                     </div>
                 </Card>
             </div>

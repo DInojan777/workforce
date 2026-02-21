@@ -7,7 +7,6 @@ import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import './JobDetail.css';
 
 export default function JobDetail() {
     const { id } = useParams();
@@ -60,7 +59,7 @@ export default function JobDetail() {
 
     if (loading) {
         return (
-            <div className="jobdetail-loading">
+            <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-text-secondary">
                 <div className="spinner-lg" />
                 <p>Loading job details...</p>
             </div>
@@ -69,7 +68,7 @@ export default function JobDetail() {
 
     if (!job) {
         return (
-            <div className="jobdetail-loading">
+            <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-text-muted">
                 <Briefcase size={48} />
                 <h3>Job not found</h3>
                 <Link to="/jobs"><Button variant="secondary">Back to Jobs</Button></Link>
@@ -78,42 +77,42 @@ export default function JobDetail() {
     }
 
     return (
-        <div className="jobdetail section">
-            <div className="container">
-                <Link to="/jobs" className="jobdetail__back">
+        <div className="py-16 pt-28">
+            <div className="max-w-[1280px] mx-auto px-6">
+                <Link to="/jobs" className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text-accent transition-colors mb-8">
                     <ArrowLeft size={18} /> Back to Jobs
                 </Link>
 
-                <div className="jobdetail__grid">
-                    <div className="jobdetail__main animate-fade-in-up">
-                        <Card hover={false} className="jobdetail__card">
-                            <div className="jobdetail__top">
-                                <h1>{job.position}</h1>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div className="lg:col-span-2 animate-fade-in-up">
+                        <Card hover={false}>
+                            <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
+                                <h1 className="text-2xl">{job.position}</h1>
                                 <Badge variant="accent">{job.vacancies || '?'} openings</Badge>
                             </div>
 
-                            <div className="jobdetail__meta">
-                                <span><Briefcase size={16} /> {job.experience || 0}+ years experience</span>
-                                <span><DollarSign size={16} /> Budget: ₹{job.budget || 'N/A'}</span>
-                                <span><Clock size={16} /> Expires: {formatDate(job.expried_date)}</span>
-                                <span><Users size={16} /> Ref: {job.reference_name || 'N/A'}</span>
-                                {job.reference_no && <span><Phone size={16} /> {job.reference_no}</span>}
+                            <div className="flex flex-wrap gap-4 text-sm text-text-secondary mb-8 pb-6 border-b border-border-subtle">
+                                <span className="flex items-center gap-1.5"><Briefcase size={16} /> {job.experience || 0}+ years experience</span>
+                                <span className="flex items-center gap-1.5"><DollarSign size={16} /> Budget: ₹{job.budget || 'N/A'}</span>
+                                <span className="flex items-center gap-1.5"><Clock size={16} /> Expires: {formatDate(job.expried_date)}</span>
+                                <span className="flex items-center gap-1.5"><Users size={16} /> Ref: {job.reference_name || 'N/A'}</span>
+                                {job.reference_no && <span className="flex items-center gap-1.5"><Phone size={16} /> {job.reference_no}</span>}
                             </div>
 
-                            <div className="jobdetail__section">
-                                <h3>Description</h3>
-                                <p>{job.description || 'No description provided.'}</p>
+                            <div>
+                                <h3 className="text-base mb-3">Description</h3>
+                                <p className="text-text-secondary leading-relaxed">{job.description || 'No description provided.'}</p>
                             </div>
                         </Card>
                     </div>
 
-                    <div className="jobdetail__sidebar animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
-                        <Card hover={false} className="jobdetail__apply-card">
-                            <h3>Interested?</h3>
-                            <p>Apply to this position and connect with the employer.</p>
+                    <div className="animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+                        <Card hover={false}>
+                            <h3 className="text-base mb-2">Interested?</h3>
+                            <p className="text-sm text-text-secondary mb-6">Apply to this position and connect with the employer.</p>
 
                             {message && (
-                                <div className={`jobdetail__message ${message.includes('success') ? 'jobdetail__message--success' : 'jobdetail__message--error'}`}>
+                                <div className={`text-sm rounded-lg px-4 py-2.5 mb-4 ${message.includes('success') ? 'text-success bg-success-soft' : 'text-danger bg-danger-soft'}`}>
                                     {message}
                                 </div>
                             )}
@@ -123,7 +122,7 @@ export default function JobDetail() {
                                     Apply Now
                                 </Button>
                             ) : (
-                                <form onSubmit={handleApply} className="jobdetail__apply-form">
+                                <form onSubmit={handleApply} className="flex flex-col gap-4">
                                     <Input label="Expected Rate" placeholder="e.g. ₹25000/month" value={rate} onChange={(e) => setRate(e.target.value)} icon={DollarSign} required />
                                     <Button type="submit" fullWidth loading={applying}>Submit Application</Button>
                                     <Button variant="ghost" fullWidth onClick={() => setShowApply(false)}>Cancel</Button>
