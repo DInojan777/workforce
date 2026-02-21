@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Phone, Shield, Camera, Upload, Briefcase, Star } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -22,9 +22,8 @@ export default function Profile() {
         try {
             const formData = new FormData();
             formData.append('portfolio_photo', file);
-            formData.append('user_info_id', user?.employee_id || '');
             const res = await uploadPortfolio(formData);
-            setUploadMsg(res.success ? 'Portfolio photo uploaded successfully!' : (res.error_message || 'Upload failed'));
+            setUploadMsg(res.success ? 'Photo uploaded!' : (res.error_message || 'Upload failed'));
         } catch { setUploadMsg('Network error'); }
         finally { setUploading(false); }
     };
@@ -33,20 +32,20 @@ export default function Profile() {
     if (!user) return null;
 
     const getRoleBadges = () => {
-        const badges = [];
-        if (permissions?.is_admin) badges.push({ label: 'Admin', variant: 'danger' });
-        if (permissions?.is_job_seeker) badges.push({ label: 'Job Seeker', variant: 'info' });
-        if (permissions?.is_client) badges.push({ label: 'Client', variant: 'accent' });
-        if (permissions?.is_contractor) badges.push({ label: 'Contractor', variant: 'warning' });
-        if (permissions?.is_guest) badges.push({ label: 'Guest', variant: 'default' });
-        return badges;
+        const b = [];
+        if (permissions?.is_admin) b.push({ label: 'Admin', variant: 'danger' });
+        if (permissions?.is_job_seeker) b.push({ label: 'Job Seeker', variant: 'info' });
+        if (permissions?.is_client) b.push({ label: 'Client', variant: 'accent' });
+        if (permissions?.is_contractor) b.push({ label: 'Contractor', variant: 'warning' });
+        if (permissions?.is_guest) b.push({ label: 'Guest', variant: 'default' });
+        return b;
     };
 
     const infoItems = [
         { icon: Mail, label: 'Email', value: user.email },
         { icon: Phone, label: 'Mobile', value: user.mobile_number || 'Not set' },
         { icon: User, label: 'Gender', value: user.gender === 'M' ? 'Male' : user.gender === 'F' ? 'Female' : user.gender || 'Not set' },
-        { icon: Shield, label: 'Account Status', value: user.is_active ? '✅ Active' : '❌ Inactive' },
+        { icon: Shield, label: 'Status', value: user.is_active ? '✅ Active' : '❌ Inactive' },
     ];
 
     return (
@@ -68,54 +67,36 @@ export default function Profile() {
                                 {getRoleBadges().map((b, i) => <Badge key={i} variant={b.variant}>{b.label}</Badge>)}
                             </div>
                         </Card>
-
                         <Card hover={false}>
                             <h3 className="text-base mb-5">Personal Information</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 {infoItems.map((item, i) => (
                                     <div key={i} className="flex items-start gap-3">
-                                        <span className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center justify-center text-text-muted shrink-0">
-                                            <item.icon size={16} />
-                                        </span>
-                                        <div>
-                                            <p className="text-xs text-text-muted">{item.label}</p>
-                                            <p className="text-sm font-medium">{item.value}</p>
-                                        </div>
+                                        <span className="w-9 h-9 rounded-lg bg-bg-input flex items-center justify-center text-text-muted shrink-0"><item.icon size={16} /></span>
+                                        <div><p className="text-xs text-text-muted">{item.label}</p><p className="text-sm font-medium">{item.value}</p></div>
                                     </div>
                                 ))}
                             </div>
                         </Card>
                     </div>
-
                     <div className="flex flex-col gap-6 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
                         <Card hover={false}>
                             <h3 className="flex items-center gap-2 text-base mb-2"><Camera size={18} /> Portfolio</h3>
-                            <p className="text-sm text-text-secondary mb-5">Upload photos to showcase your work. Max 2 per day.</p>
+                            <p className="text-sm text-text-secondary mb-5">Upload photos to showcase your work.</p>
                             <label className="block cursor-pointer">
                                 <input type="file" accept="image/*" onChange={handlePhotoUpload} hidden disabled={uploading} />
                                 <Button variant="secondary" fullWidth icon={Upload} loading={uploading} onClick={() => { }}>
                                     {uploading ? 'Uploading...' : 'Upload Photo'}
                                 </Button>
                             </label>
-                            {uploadMsg && (
-                                <div className={`text-sm rounded-lg px-4 py-2.5 mt-4 ${uploadMsg.includes('success') ? 'text-success bg-success-soft' : 'text-danger bg-danger-soft'}`}>
-                                    {uploadMsg}
-                                </div>
-                            )}
+                            {uploadMsg && <div className={`text-sm rounded-lg px-4 py-2.5 mt-4 ${uploadMsg.includes('success') || uploadMsg.includes('uploaded') ? 'text-success bg-success-soft' : 'text-danger bg-danger-soft'}`}>{uploadMsg}</div>}
                         </Card>
-
                         <Card hover={false}>
                             <h3 className="flex items-center gap-2 text-base mb-4"><Briefcase size={18} /> Quick Links</h3>
                             <div className="flex flex-col gap-1">
-                                <a href="/jobs" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-text-secondary hover:text-text-accent hover:bg-white/[0.04] transition-all">
-                                    <Briefcase size={16} /> Browse Jobs
-                                </a>
-                                <a href="/create-job" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-text-secondary hover:text-text-accent hover:bg-white/[0.04] transition-all">
-                                    <Star size={16} /> Post a Job
-                                </a>
-                                <a href="/dashboard" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-text-secondary hover:text-text-accent hover:bg-white/[0.04] transition-all">
-                                    <Shield size={16} /> Dashboard
-                                </a>
+                                <a href="/jobs" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-text-secondary hover:text-accent-primary hover:bg-accent-soft transition-all"><Briefcase size={16} /> Browse Jobs</a>
+                                <a href="/create-job" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-text-secondary hover:text-accent-primary hover:bg-accent-soft transition-all"><Star size={16} /> Post a Job</a>
+                                <a href="/dashboard" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-text-secondary hover:text-accent-primary hover:bg-accent-soft transition-all"><Shield size={16} /> Dashboard</a>
                             </div>
                         </Card>
                     </div>

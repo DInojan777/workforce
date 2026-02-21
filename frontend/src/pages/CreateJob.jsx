@@ -16,11 +16,10 @@ export default function CreateJob() {
     const [form, setForm] = useState({
         position: '', description: '', experience: '', reference_name: '', reference_no: '',
         vacancies: '', budget: '', expried_date: '',
-        mobile_number_01: '', address_line_01: '', city: '', district: '', state: '', pincode: '', country: '',
+        mobile_number_01: '', address_line_01: '', city: '', district: '', state: '', pincode: '', country: ''
     });
 
     useEffect(() => { if (!authLoading && !isAuthenticated) navigate('/login'); }, [authLoading, isAuthenticated]);
-
     const handleChange = (e) => { setForm({ ...form, [e.target.name]: e.target.value }); setError(''); };
 
     const handleSubmit = async (e) => {
@@ -30,8 +29,7 @@ export default function CreateJob() {
             const res = await createJob(payload);
             if (res.success) { setSuccess('Job posted successfully!'); setTimeout(() => navigate('/jobs'), 1500); }
             else setError(res.error_message || 'Failed to create job');
-        } catch { setError('Network error. Please try again.'); }
-        finally { setLoading(false); }
+        } catch { setError('Network error.'); } finally { setLoading(false); }
     };
 
     if (authLoading) return <div className="min-h-screen flex items-center justify-center"><div className="spinner-lg" /></div>;
@@ -46,11 +44,12 @@ export default function CreateJob() {
                 <Card className="max-w-3xl mx-auto animate-fade-in-up" hover={false} style={{ animationDelay: '0.1s' }}>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                         <div className="flex flex-col gap-5">
-                            <h3 className="flex items-center gap-2 text-base pb-2 border-b border-border-subtle"><Briefcase size={18} className="text-accent-primary" /> Job Information</h3>
+                            <h3 className="flex items-center gap-2 text-base pb-2 border-b border-border-subtle text-accent-primary"><Briefcase size={18} /> Job Information</h3>
                             <Input label="Position / Title" name="position" placeholder="e.g. Full Stack Developer" icon={Briefcase} value={form.position} onChange={handleChange} required />
                             <div className="flex flex-col gap-1.5">
                                 <label className="text-sm font-medium text-text-secondary">Description</label>
-                                <textarea name="description" placeholder="Describe the role..." value={form.description} onChange={handleChange} rows={5} required className="bg-bg-input border border-border-subtle rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted resize-y transition-all duration-250 focus:border-accent-primary focus:shadow-[0_0_0_3px_rgba(99,102,241,0.15)] outline-none" />
+                                <textarea name="description" placeholder="Describe the role..." value={form.description} onChange={handleChange} rows={5} required
+                                    className="bg-bg-input border border-border-subtle rounded-xl px-4 py-3 text-sm text-text-primary placeholder:text-text-muted resize-y transition-all duration-250 focus:border-accent-primary focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)] focus:bg-white outline-none" />
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <Input label="Experience (years)" name="experience" type="number" placeholder="e.g. 3" icon={Briefcase} value={form.experience} onChange={handleChange} required />
@@ -66,7 +65,7 @@ export default function CreateJob() {
                             </div>
                         </div>
                         <div className="flex flex-col gap-5">
-                            <h3 className="flex items-center gap-2 text-base pb-2 border-b border-border-subtle"><MapPin size={18} className="text-accent-primary" /> Job Location</h3>
+                            <h3 className="flex items-center gap-2 text-base pb-2 border-b border-border-subtle text-accent-primary"><MapPin size={18} /> Location</h3>
                             <Input label="Contact Number" name="mobile_number_01" placeholder="Location contact" icon={Phone} value={form.mobile_number_01} onChange={handleChange} required />
                             <Input label="Address" name="address_line_01" placeholder="Street address" icon={MapPin} value={form.address_line_01} onChange={handleChange} required />
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
