@@ -1,0 +1,107 @@
+.login-page {
+    min-height: calc(100vh - var(--navbar-height));
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: var(--space-xl) 0;
+}
+
+.login-page__bg-orb {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.login-page__container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    padding: var(--space-2xl) !important;
+}
+
+.login-card__header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.login-card__header h2 {
+    margin-bottom: 0.4rem;
+}
+
+.login-card__header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.login-card__toggle {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: var(--space-xl);
+    background: var(--bg-input);
+    border-radius: var(--radius-md);
+    padding: 4px;
+}
+
+.toggle-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: all var(--transition-fast);
+}
+
+.toggle-btn--active {
+    background: var(--accent-soft);
+    color: var(--accent-primary-hover);
+}
+
+.login-card__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.login-card__error {
+    background: var(--danger-soft);
+    color: var(--danger);
+    padding: 0.7rem var(--space-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    text-align: center;
+}
+
+.login-card__footer {
+    text-align: center;
+    margin-top: var(--space-lg);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.login-card__link {
+    color: var(--accent-primary-hover);
+    font-weight: 600;
+}
+
+.login-card__link:hover {
+    text-decoration: underline;
+}
