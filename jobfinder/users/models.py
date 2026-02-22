@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from authentication.models import BaseModelMixin, UserAuthentication
 from django.utils.timezone import now
 from company.models import *
-from multiselectfield import MultiSelectField
+
 class UserDesignation(BaseModelMixin):
     name = models.CharField(max_length=220, null=True, blank=True)
     tag = models.CharField(max_length=220, null=True, blank=True)
@@ -17,7 +17,7 @@ class UserDesignation(BaseModelMixin):
 
 class UserPersonalInfo(BaseModelMixin):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     authentication=models.ForeignKey(UserAuthentication,on_delete=models.CASCADE,null=True, blank=True)
     gender = models.CharField(max_length=5)
     age = models.CharField(max_length=3,null=True,blank=True)
@@ -33,7 +33,7 @@ class UserPersonalInfo(BaseModelMixin):
     
 class EmployeeCompanyInfo(BaseModelMixin):
     
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     employee_id = models.CharField(max_length=30, null=True, blank=True)
     designation =  models.ForeignKey(UserDesignation, on_delete=models.SET_NULL, null=True, blank=True)
     department =  models.ForeignKey(CompanyDepartment, on_delete=models.SET_NULL, null=True, blank=True)
@@ -53,13 +53,13 @@ class EmployeeCompanyInfo(BaseModelMixin):
 class UserProfessionalInfo(BaseModelMixin):
 
     DAY_CHOICES = [
-    ('mon', 'Monday'),
-    ('tue', 'Tuesday'),
-    ('wed', 'Wednesday'),
-    ('thu', 'Thursday'),
-    ('fri', 'Friday'),
-    ('sat', 'Saturday'),
-    ('sun', 'Sunday'),
+        ('mon', 'Monday'),
+        ('tue', 'Tuesday'),
+        ('wed', 'Wednesday'),
+        ('thu', 'Thursday'),
+        ('fri', 'Friday'),
+        ('sat', 'Saturday'),
+        ('sun', 'Sunday'),
     ]
 
     CATEGORY_CHOICES = [
@@ -72,8 +72,11 @@ class UserProfessionalInfo(BaseModelMixin):
     position=models.CharField(max_length=220, null=True, blank=True)
     Description=models.TextField(null=True, blank=True)
     Experience=models.IntegerField(default=0)
-    available_days_category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
-    custom_days = MultiSelectField(choices=DAY_CHOICES, blank=True, null=True)
+    available_days_category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, null=True, blank=True)
+    # Changed from MultiSelectField to JSONField for MongoDB compatibility
+    custom_days = models.JSONField(default=list, blank=True)
+    rating=models.CharField(max_length=5, null=True, blank=True)
+    portfolio_photo = models.ImageField(upload_to='portfolio_photos/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # Auto-fill days based on selected category
@@ -85,5 +88,3 @@ class UserProfessionalInfo(BaseModelMixin):
 
     def __str__(self):
         return f"{self.available_days_category} - {self.custom_days}"
-    rating=models.CharField(max_length=5, null=True, blank=True)
-    portfolio_photo = models.ImageField(upload_to='portfolio_photos/', null=True, blank=True)

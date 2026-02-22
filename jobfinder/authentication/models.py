@@ -1,8 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import User  # new
+from django.contrib.auth.models import AbstractUser
+from django_mongodb_backend.fields import ObjectIdAutoField
 import uuid
 import random
 import string
+
+class User(AbstractUser):
+    """Custom User model that uses ObjectIdAutoField for MongoDB compatibility."""
+    id = ObjectIdAutoField(primary_key=True)
+
+    class Meta:
+        db_table = 'auth_user'
 
 class BaseModelMixin(models.Model):
 
@@ -73,7 +81,7 @@ class AppBaseConfig(BaseModelMixin):
         max_length=210, null=True, blank=True)
 
 class UserAuthentication(BaseModelMixin):
-    user = models.ForeignKey(User, unique=True, on_delete=models.CASCADE)
+    user = models.OneToOneField('authentication.User', on_delete=models.CASCADE)
     mobile_otp = models.CharField(max_length=8, null=True, blank=True)
     otp_expiry = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=False)

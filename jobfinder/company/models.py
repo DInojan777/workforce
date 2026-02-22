@@ -1,7 +1,7 @@
 from email.policy import default
 from django.db import models
 from authentication.models import BaseModelMixin
-from django.contrib.auth.models import User 
+from django.conf import settings
 from django.utils.timezone import now
 
 class CompanySector(BaseModelMixin):

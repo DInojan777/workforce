@@ -1,17 +1,17 @@
 from django.db import models
 from authentication.models import BaseModelMixin
 from users.models import EmployeeCompanyInfo
-from django.contrib.auth.models import User
+from django.conf import settings
 from authentication.models import *
 from company.models import *
-from multiselectfield import MultiSelectField
+from django.utils.timezone import now
 
 class JobDocument(BaseModelMixin):
 
     title = models.CharField(max_length=220, null=True, blank=True)
     photo = models.ImageField(upload_to='job_document', null=True, blank=True)
     time_stamp = models.DateTimeField(default=now, editable=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     attachment = models.FileField(upload_to='job_document',null=True,blank=True)
     size = models.CharField(max_length=100, null=True, blank=True)
     file_name = models.CharField(max_length=100, null=True, blank=True)
@@ -40,10 +40,9 @@ class Joblist(BaseModelMixin):
         ('daily', 'Daily wages'),
         ('hourly', 'Hourly wages'),
         ('contractor', 'Contactor-based'),
-
     ]
     raised_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     provider_info=models.ForeignKey(EmployeeCompanyInfo, on_delete=models.CASCADE, null=True, blank=True)
     position = models.CharField(max_length=225,null=True, blank=True)
     description=models.TextField(null=True, blank=True)
@@ -52,10 +51,12 @@ class Joblist(BaseModelMixin):
     reference_no=models.CharField(max_length=8, null=True, blank=True)
     vacancies=models.CharField(max_length=8, null=True, blank=True)
     budget=models.CharField(max_length=15, null=True, blank=True)
-    payment_type = MultiSelectField(max_length=100, choices=SALARY_CHOICES, blank=True, default='')
+    # Changed from MultiSelectField to JSONField for MongoDB compatibility
+    payment_type = models.JSONField(default=list, blank=True)
     expried_date = models.DateTimeField(null=True)
     location=models.ForeignKey(JobLocationInfo, on_delete=models.CASCADE, null=True, blank=True)
-    attachments =models.ManyToManyField(JobDocument)
+    # Changed from ManyToManyField to JSONField for MongoDB compatibility
+    attachment_ids = models.JSONField(default=list, blank=True)
 
 class JobApplication(BaseModelMixin):
 

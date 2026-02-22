@@ -1,11 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import UserAuthentication
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework import authentication, permissions
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
 from .response_serializers import *
 from .request_serializers import *
 from users.models import *
@@ -16,6 +13,7 @@ from django.utils import timezone
 from django.utils.timezone import now
 import re
 
+User = get_user_model()
 
 
 class RegisterJobSeeker(APIView):
@@ -184,9 +182,6 @@ class RegisterClientAndContractor(APIView):
             ## Creating Company Branch  Detail
             #################################
             form_company_branch = {}
-            #   form_company_branch['name'] = company_meta['brand_name']
-            #   form_company_branch['display_name'] = company_meta['brand_name']
-            #   form_company_branch['is_parent'] = True
             form_company_branch['is_active'] = True
             companyBranchInfo=CompanyBranchInfo.objects.create(
                   company= companyMetaInfo, company_contact=companyContactInfo, **form_company_branch)
@@ -250,9 +245,6 @@ class MemberLoginUsingPassword(APIView):
             if not email and not mobile_number:
                   return Response(get_validation_failure_response([], "Mobile number or email is required"))
             
-           
-            
-            
             #########################################
             # login user
             #########################################
@@ -290,9 +282,7 @@ class MemberLoginUsingPassword(APIView):
                   return Response(get_validation_failure_response([], "Your account activation is in progress. You will receive an email notification upon activation."))
 
             if user is not None:
-                  login(request, user)
-                  token=Token.objects.get(user=user).key
-                  EmployeeCompanyInfo.objects.get(user = user)
+                  token = get_user_token(user.username)
                     
                   employeeCompanyInfo.custom_field['variant'] = 'admin'
                   employeeCompanyInfo.save()
@@ -340,18 +330,18 @@ class SendOtp (APIView):
 
             if user.password != data["password"]:
                   otp = str((random.randint(1000,9999)))
-                  authentication = employeeCompanyInfo.authentication
-                  authentication.mobile_otp = otp
-                  authentication.otp_expiry = timezone.now() + timedelta(minutes=2)  
-                  authentication.save()
+                  auth = employeeCompanyInfo.authentication
+                  auth.mobile_otp = otp
+                  auth.otp_expiry = timezone.now() + timedelta(minutes=2)  
+                  auth.save()
                   
+                  token = get_user_token(user.username)
+
                   if email:
-                        token=Token.objects.get(user=user).key
                         return Response(get_success_response(message="OTP sent successfully to your email", details={"otp": otp,"token":token}))
 
                   # send OTP via SMS or email
                   elif mobile_number: 
-                        token=Token.objects.get(user=user).key
                         return Response(get_success_response(message="OTP sent successfully to your mobile number", details={"otp": otp,"token":token}))
 
             else:
@@ -362,8 +352,8 @@ class SendOtp (APIView):
 
 class Dashboard(APIView):
     
-      authentication_classes = [authentication.TokenAuthentication]
-      permission_classes = [permissions.IsAuthenticated]
+      authentication_classes = []
+      permission_classes = []
 
       def post(self, request, format=None):
 
@@ -371,7 +361,6 @@ class Dashboard(APIView):
             request_info = get_user_company_from_request(request)
 
             if request_info['company_info'] is not None:
-                  print("request_info['company_info']=========>",request_info['company_info'])
 
                   try:
                         employeeCompanyInfo = EmployeeCompanyInfo.objects.get(
@@ -387,7 +376,7 @@ class Dashboard(APIView):
                   res["success"] = True
 
                   user_details = {}
-                  user_details["employee_id"] = employeeCompanyInfo.id
+                  user_details["employee_id"] = str(employeeCompanyInfo.id)
                   user_details["name"] = employeeCompanyInfo.user.first_name
                   user_details["email"] = employeeCompanyInfo.user.email
                   user_details["is_active"] = employeeCompanyInfo.authentication.is_active
@@ -402,17 +391,13 @@ class Dashboard(APIView):
                   permission_details['is_job_seeker']=request_info['is_job_seeker']
                   permission_details["is_guest"] =request_info['is_guest']
                   permission_details["company_branch"] =request_info['company_branch']
-                  permission_details["company_info"] = request_info['company_info'].id
+                  permission_details["company_info"] = str(request_info['company_info'].id)
 
                   dashboard={"user_details": user_details,
                         "permission_details": permission_details}                        
-                  print("details=====================",dashboard)
                   return Response(get_success_response(message="your dashboard is",details=dashboard))
             else:
-                  details = {}
-                  print("details2")
-                  print(details)
-                  return Response(get_validation_failure_response(None, '2Please login to continue'))
+                  return Response(get_validation_failure_response(None, 'Please login to continue'))
             
 # ========================================================================================================================
             
