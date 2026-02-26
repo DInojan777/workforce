@@ -15,8 +15,8 @@ from users.models import *
 
 class CreateJob(APIView):
 
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         data = request.data
